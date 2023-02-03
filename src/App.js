@@ -1,169 +1,85 @@
 import './App.css';
-import { useState } from 'react';
-import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import Optionshow from './components/option';
-// import Paper from '@mui/material/Paper';
-import ReactDOM from 'react-dom/client';
+import { Typography } from '@mui/material';
+import Input from './component/input';
+import { useState } from 'react';
+import Buttons from './component/buttonshow';
+import "bootstrap/dist/css/bootstrap.min.css";
+
 
 function App() {
-  const [quizdata, setquizdata] = useState({
-    quizName: 'React Quiz',
-    totalMarks: 60,
-    perQuestionMarks: 10,
-    questions: [
-      {
-        question: "Html Stands For _______",
-        options: [
-          "Hyper Text Makeup Language",
-          "html",
-          "Case Cading Style Sheet",
-          "Hypertext markup language",
-        ],
-        correctAns: "Hypertext markup language",
-      },
-      {
-        question: "Css Stands For _________",
-        options: [
-          "Hypertext markup language",
-          "Java",
-          "Ram",
-          "Casecading Style Sheet",
-        ],
-        correctAns: "Casecading Style Sheet",
-      },
-      {
-        question: "Js Stands For _________",
-        options: ["Java Style", "Java Script", "Script", "Script Src"],
-        correctAns: "Java Script",
-      },
-      {
-        question: "Dom Stands For _________",
-        options: ["Document Object Model", "html", "Css", "Java"],
-        correctAns: "Document Object Model",
-      },
-      {
-        question: "Ram Stands For _________",
-        options: ["Read Only Memory", "Dom", "Random Acccess Memory", "For Pc"],
-        correctAns: "Random Acccess Memory",
-      },
-      {
-        question: "Rom Stands For _________",
-        options: [
-          "Hyper Text Markup Language",
-          "html",
-          "HTml",
-          "Read Only Memory",
-        ],
-        correctAns: "Read Only Memory",
-      },
-    ],
-  })
-  // const [statusConfig, setStatusConfig] = useState([
-  //   {
-  //     label: 'Correct Question',
-  //     value: 0,
-  //     color: 'grey',
-  //   },
-  //   {
-  //     label: 'Total Question',
-  //     value: questions.length,
-  //     color: 'blue',
-  //   },
-  //   {
-  //     label: 'Attempted Value',
-  //     value: 0,
-  //     color: 'green'
-  //   },
-  // ])
-  const [indexNum, setIndexNum] = useState(0);
-  const { quizName, totalMarks, perQuestionMarks, questions } = quizdata;
-  const [marks, setMarks] = useState(0)
-  const [status, setStatus] = useState('')
-  const [showScore, setShowScore] = useState(false)
-  let percentage = (marks / totalMarks) * 100
+  const [todos, setTodos] = useState([]);
+  const [text, setText] = useState("");
+  const [indexNum, setIndexNum] = useState();
+  const [mainquestions, setQuestions] = useState([])
+  const [questionquiz, setQuestion] = useState("")
+  const [correctAns, setCorrectAnd] = useState("")
+  const [individualQuestion, setIndividualQuestion] = useState({question: '', option: '', correctAnswer: ''})
 
-
-  let checkAnswer = (e) => {
-    let correctAnswer = questions[indexNum].correctAns
-    if (e === correctAnswer) {
-      setMarks(marks + 10)
-      console.log(marks)
-    }
-    if (percentage >= 50) {
-      setStatus('Pass')
+  let add = () => {
+    if (indexNum > -1) {
+      todos[indexNum] = text;
+      setTodos([...todos]);
+      setIndexNum(-1)
     } else {
-      setStatus('Fail')
+      setTodos([...todos, text])
     }
-    console.log(status)
-    setIndexNum(indexNum + 1)
-
-    if (indexNum === 5) {
-      // return <Box>
-        setShowScore(true)
-      //     <Typography variant="h1">sdfnjksdngjdf</Typography>
-        
-      //   </Box>
-      // ReactDOM.render(<p>dksjfkdhgjdfhg</p>)
-    }
+    setText('')
+    // console.log(todos)
   }
 
+  let del = (i) => {
+    todos.splice(i, 1)
+    setTodos([...todos])
+  }
 
-  // console.log(percentage)
+  let edit = (i) => {
+    setIndexNum(i)
+    setText(todos[i])
+  }
 
+  let addquestion = () => {
+    individualQuestion.question = questionquiz
+    individualQuestion.option = todos
+    individualQuestion.correctAnswer = correctAns
+    setQuestion('')
+    setCorrectAnd('')
+    setTodos([])
+    console.log(individualQuestion)
+    console.log(mainquestions)
+  }
 
+  return <Box className="main-div">
 
-  return <div>
-  {showScore ? ( <Box style={{marginTop: '10px'}}>
-    <Typography variant='h4'  align="center">Score Card</Typography>
-    <Box style={{marginTop: '100px', marginLeft: '300px', padding: '10px', fontSize: '40px'}}>
-    <Typography variant='h5'>Attempted Questions:</Typography>
-    <Typography variant='body1'>{questions.length}</Typography>
-    <Typography variant='h5'>Total Marks:</Typography>
-    <Typography variant='body1'>{totalMarks}</Typography>
-    <Typography variant='h5'>Marks Obtained:</Typography>
-    <Typography variant='body1'>{marks}</Typography>
-    <Typography variant='h5'>Percentage:</Typography>
-    <Typography variant='body1'>{percentage}</Typography>
-    <Typography variant='h5'>Status:</Typography>
-    <Typography variant='body1'>{status}</Typography>
-
+    <Typography variant="h4" align="center">Quiz App Questions</Typography>
+    <Box style={{marginTop: '30px'}}>
+      <Typography variant="h5">Question:</Typography>
+      <Input place={'Enter a value'} change={(e) => setQuestion(e.target.value)} value={questionquiz}/>
     </Box>
-    </Box>
-  ): 
-  
-  <Box className="main_div">
-    <Typography variant='h3' style={{ marginTop: '10px' }}>{quizName}</Typography>
+    <Box style={{marginTop: '30px'}}>
+      <Typography variant="h5">Option:</Typography>
+      <Input place={'Enter a value'} value={text} change={(e) => setText(e.target.value)}/>
+      {/* <button onClick={add}>Add</button> */}
+      <Buttons click={add} btnValue="Add" />
 
-    <Typography varient="h3" style={{ display: "inline" }}>{indexNum + 1}</Typography>
-    <Typography varient="span" style={{ display: "inline" }}> / </Typography>
-    <Typography varient="h3" style={{ display: "inline" }}>{questions.length}</Typography>
-    <Box>
-      {/* <Typography variant='body1' style={{display: "inline"}}>Marks Obtained</Typography> */}
-      <Typography variant='body1' style={{ display: "inline" }}>Total Marks: </Typography>
-      <Typography variant='body1' style={{ display: "inline" }}>{totalMarks}</Typography>
-
+      <ul>
+        {todos.map((x, i) => {
+          return (<li key={i}>{x}  
+          <Buttons click={() => edit(i)} btnValue="Edit" />
+              <Buttons click={() => del(i)} btnValue="Delete" />
+          </li>
+          )
+        })}
+      </ul>
     </Box>
-    <Box style={{ marginTop: '20px' }}>
-      <Typography variant="h4" >Question</Typography>
-
-      <Typography variant='h3' style={{ margin: '10px' }}>{questions[indexNum].question}</Typography>
+    <Box style={{marginTop: '30px'}}>
+      <Typography variant="h5">Correct Answer:</Typography>
+      <Input place={'Enter a value'} change={(e) => setCorrectAnd(e.target.value)} value={correctAns}/>
     </Box>
-    <Box className="container" style={{ marginTop: '30px' }}>
-      <Optionshow optionClick={(e) => checkAnswer(e)} data={questions[indexNum].options} />
-    </Box>
-    {/* <Box>
-    <Typography variant='h4'>Total Questions</Typography>
-    <Typography variant='h4'>Total Attempted Questions</Typography>
-    <Typography variant='h4'>Total Questions</Typography>
+    <Buttons btnValue="Next" click={addquestion}/>
+    <Buttons btnValue="Done" />
 
-  </Box> */}
-  
   </Box>
-}
-  </div>
-
-
 }
 
 export default App;

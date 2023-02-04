@@ -5,6 +5,7 @@ import Input from './component/input';
 import { useState } from 'react';
 import Buttons from './component/buttonshow';
 import "bootstrap/dist/css/bootstrap.min.css";
+import { Container } from 'react-bootstrap';
 
 
 function App() {
@@ -14,7 +15,7 @@ function App() {
   const [mainquestions, setQuestions] = useState([])
   const [questionquiz, setQuestion] = useState("")
   const [correctAns, setCorrectAnd] = useState("")
-  const [individualQuestion, setIndividualQuestion] = useState({question: '', option: '', correctAnswer: ''})
+  const [individualQuestion, setIndividualQuestion] = useState({ question: '', option: '', correctAnswer: '' })
 
   let add = () => {
     if (indexNum > -1) {
@@ -45,40 +46,52 @@ function App() {
     setQuestion('')
     setCorrectAnd('')
     setTodos([])
+    setIndividualQuestion('')
     console.log(individualQuestion)
+    mainquestions.push(individualQuestion)
+    setQuestions([...mainquestions])
     console.log(mainquestions)
+
+
+
+
+
+  }
+
+  let donequestion = () => {
+    console.log(individualQuestion)
   }
 
   return <Box className="main-div">
+    <Container>
+      <Typography variant="h4" align="center">Quiz App Questions</Typography>
+      <Box style={{ marginTop: '30px' }}>
+        <Typography variant="h5">Question:</Typography>
+        <Input place={'Enter a value'} change={(e) => setQuestion(e.target.value)} value={questionquiz} />
+      </Box>
+      <Box style={{ marginTop: '30px' }}>
+        <Typography variant="h5">Option:</Typography>
+        <Input place={'Enter a value'} value={text} change={(e) => setText(e.target.value)} />
+        {/* <button onClick={add}>Add</button> */}
+        <Buttons click={add} btnValue="Add" />
 
-    <Typography variant="h4" align="center">Quiz App Questions</Typography>
-    <Box style={{marginTop: '30px'}}>
-      <Typography variant="h5">Question:</Typography>
-      <Input place={'Enter a value'} change={(e) => setQuestion(e.target.value)} value={questionquiz}/>
-    </Box>
-    <Box style={{marginTop: '30px'}}>
-      <Typography variant="h5">Option:</Typography>
-      <Input place={'Enter a value'} value={text} change={(e) => setText(e.target.value)}/>
-      {/* <button onClick={add}>Add</button> */}
-      <Buttons click={add} btnValue="Add" />
-
-      <ul>
-        {todos.map((x, i) => {
-          return (<li key={i}>{x}  
-          <Buttons click={() => edit(i)} btnValue="Edit" />
+        <ul>
+          {todos.map((x, i) => {
+            return (<li key={i}>{x}
+              <Buttons click={() => edit(i)} btnValue="Edit" />
               <Buttons click={() => del(i)} btnValue="Delete" />
-          </li>
-          )
-        })}
-      </ul>
-    </Box>
-    <Box style={{marginTop: '30px'}}>
-      <Typography variant="h5">Correct Answer:</Typography>
-      <Input place={'Enter a value'} change={(e) => setCorrectAnd(e.target.value)} value={correctAns}/>
-    </Box>
-    <Buttons btnValue="Next" click={addquestion}/>
-    <Buttons btnValue="Done" />
-
+            </li>
+            )
+          })}
+        </ul>
+      </Box>
+      <Box style={{ marginTop: '30px' }}>
+        <Typography variant="h5">Correct Answer:</Typography>
+        <Input place={'Enter a value'} change={(e) => setCorrectAnd(e.target.value)} value={correctAns} />
+      </Box>
+      <Buttons btnValue="Next" click={addquestion} />
+      <Buttons btnValue="Done" click={donequestion} />
+    </Container>
   </Box>
 }
 
